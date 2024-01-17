@@ -1,7 +1,8 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
 import { SnackbarProvider } from "notistack";
-import Router from '../router';
+import Router from "@/router";
+
 function App() {
   return (
     <SnackbarProvider maxSnack={3}>
