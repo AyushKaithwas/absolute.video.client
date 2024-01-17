@@ -92,21 +92,30 @@ function Navbar() {
   const { user } = useAuth();
   const isAuthenticated = !!user;
   return (
-    <nav className="w-full bg-background flex z-10  justify-center items-center  px-3 py-5 sticky top-0 border-b-2">
+    <nav className="w-full bg-background flex justify-center items-center  z-10   px-3 py-5 sticky top-0 border-b-2">
       <div className=" max-w-7xl w-full flex justify-between items-center">
         <a href="/">
-          <h3 className=" text-lg font-bold">Surefix</h3>
+          <h3 className=" text-lg font-bold">Absolute Video</h3>
         </a>
         <NavigationMenu className="hidden md:block">
           <NavigationMenuList className="gap-4">
-            {isAuthenticated &&
+            {isAuthenticated ? (
               navigation.map((item) => (
                 <NavigationMenuItem key={item.name}>
                   <a href={item.href}>
                     <NavigationMenuLink>{item.name}</NavigationMenuLink>
                   </a>
                 </NavigationMenuItem>
-              ))}
+              ))
+            ) : (
+              <NavigationMenuItem>
+                <a href={paths.login}>
+                  <Button variant="secondary">
+                    <NavigationMenuLink>Login</NavigationMenuLink>
+                  </Button>
+                </a>
+              </NavigationMenuItem>
+            )}
 
             <NavigationMenuItem>
               <ThemeSwitcher />
@@ -116,11 +125,21 @@ function Navbar() {
 
         <NavigationMenu className="md:hidden">
           <NavigationMenuList className="gap-4">
+            {isAuthenticated ? (
+              <NavigationMenuItem>
+                <HamburgerMenu />
+              </NavigationMenuItem>
+            ) : (
+              <NavigationMenuItem>
+                <a href={paths.login}>
+                  <Button variant="secondary">
+                    <NavigationMenuLink>Login</NavigationMenuLink>
+                  </Button>
+                </a>
+              </NavigationMenuItem>
+            )}
             <NavigationMenuItem>
               <ThemeSwitcher />
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <HamburgerMenu />
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

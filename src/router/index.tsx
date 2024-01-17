@@ -3,9 +3,9 @@ import { Navigate, Outlet, useRoutes } from "react-router-dom";
 import { paths } from "./paths";
 import AuthGuard from "@/auth/guard/auth-guard";
 
-const Home = React.lazy(() => import("src/pages/home"));
-// const LogOut = React.lazy(() => import("src/sections/logout"));
-
+const Home = React.lazy(() => import("@/pages/home"));
+const LogOut = React.lazy(() => import("@/pages/logout"));
+const Login = React.lazy(() => import("@/pages/login"));
 export default function Router() {
   return useRoutes([...root]);
 }
@@ -23,13 +23,12 @@ const root = [
     element: <Home />,
   },
   {
-    path: "/a",
-    element: (
-      <AuthGuard>
-        <Outlet />
-      </AuthGuard>
-    ),
-    children: childPaths,
+    path: paths.login,
+    element: <Login />,
+  },
+  {
+    path: paths.logout,
+    element: <LogOut />,
   },
   { path: "*", element: <Navigate to="/404" replace /> },
 ];

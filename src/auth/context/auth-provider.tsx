@@ -8,8 +8,8 @@ import {
 } from "react";
 import { ActionMapType, AuthStateType } from "../types";
 import { AuthContext } from "./auth-context";
-import { useSnackbar } from "notistack";
 import { Session, User, createClient } from "@supabase/supabase-js";
+import { useToast } from "@/components/ui/use-toast";
 
 enum Types {
   INITIAL = "INITIAL",
@@ -53,7 +53,7 @@ const supabase = createClient(
 
 export function AuthProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const snackBar = useSnackbar();
+  const { toast } = useToast();
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
@@ -89,27 +89,43 @@ export function AuthProvider({ children }: Props) {
         password,
       });
       if (error) {
-        snackBar.enqueueSnackbar(error.message, { variant: "error" });
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
       }
+      return error;
     },
-    [snackBar]
+    [toast]
   );
 
   const logout = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      snackBar.enqueueSnackbar(error.message, { variant: "error" });
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
     }
-  }, [snackBar]);
+    return error;
+  }, [toast]);
 
   const signup = useCallback(
     async (email: string, password: string) => {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) {
-        snackBar.enqueueSnackbar(error.message, { variant: "error" });
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
       }
+      return error;
     },
-    [snackBar]
+
+    [toast]
   );
 
   const loginWithGoogle = useCallback(async () => {
@@ -117,9 +133,14 @@ export function AuthProvider({ children }: Props) {
       provider: "google",
     });
     if (error) {
-      snackBar.enqueueSnackbar(error.message, { variant: "error" });
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
     }
-  }, []);
+    return error;
+  }, [toast]);
 
   const value = useMemo(
     () => ({
@@ -132,7 +153,7 @@ export function AuthProvider({ children }: Props) {
       signup,
       loginWithGoogle,
     }),
-    [login, logout, signup, loginWithGoogle, state]
+    [session, state.loading, state.user, login, logout, signup, loginWithGoogle]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
