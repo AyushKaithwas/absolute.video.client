@@ -1,4 +1,11 @@
-import { useEffect, useReducer, useCallback, useMemo, useState } from "react";
+import {
+  useEffect,
+  useReducer,
+  useCallback,
+  useMemo,
+  useState,
+  useContext,
+} from "react";
 import { ActionMapType, AuthStateType } from "../types";
 import { AuthContext } from "./auth-context";
 import { useSnackbar } from "notistack";
@@ -12,6 +19,10 @@ type Payload = {
   [Types.INITIAL]: {
     user: User | null;
   };
+};
+
+export const useAuth = () => {
+  return useContext(AuthContext);
 };
 
 type Action = ActionMapType<Payload>[keyof ActionMapType<Payload>];

@@ -1,9 +1,9 @@
 import React from "react";
 import { Navigate, Outlet, useRoutes } from "react-router-dom";
 import { paths } from "./paths";
-import AuthGuard from "../auth/guard/auth-guard";
+import AuthGuard from "@/auth/guard/auth-guard";
 
-// const Home = React.lazy(() => import("src/sections/home"));
+const Home = React.lazy(() => import("src/pages/home"));
 // const LogOut = React.lazy(() => import("src/sections/logout"));
 
 export default function Router() {
@@ -20,7 +20,7 @@ const childPaths = [
 const root = [
   {
     path: paths.root,
-    element: <>Home</>,
+    element: <Home />,
   },
   {
     path: "/a",
